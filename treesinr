@@ -1,0 +1,74 @@
+> data(iris)
+> names(iris)
+[1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width"  "Species"     
+> table(iris$Species)
+
+    setosa versicolor  virginica 
+        50         50         50 
+> plot(iris$Petal.Width, iris$Sepal.Width,pch=19,col=as.numeric(iris$Species))
+> legend(1,4.5,legend=unique(iris$Species), col=unique(as.numeric(iris$Species)),pch=19)
+https://cloud.githubusercontent.com/assets/10501253/7058449/162d1512-de30-11e4-8107-cfa28e5a28a9.png
+
+> install.packages("tree")
+Installing package into ‘C:/Users/Chelsea/Documents/R/win-library/3.1’
+(as ‘lib’ is unspecified)
+trying URL 'http://cran.rstudio.com/bin/windows/contrib/3.1/tree_1.0-35.zip'
+Content type 'application/zip' length 117764 bytes (115 Kb)
+opened URL
+downloaded 115 Kb
+
+package ‘tree’ successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+	C:\Users\Chelsea\AppData\Local\Temp\RtmpyOvmKt\downloaded_packages
+> library(tree)
+Warning message:
+package ‘tree’ was built under R version 3.1.3 
+> tree1<-tree(Species~Sepal.Width+Petal.Width, data=iris)
+> summary(tree1)
+
+Classification tree:
+tree(formula = Species ~ Sepal.Width + Petal.Width, data = iris)
+Number of terminal nodes:  5 
+Residual mean deviance:  0.204 = 29.57 / 145 
+Misclassification error rate: 0.03333 = 5 / 150 
+
+> plot(tree1)
+> text(tree1)
+https://cloud.githubusercontent.com/assets/10501253/7058482/7e7c8d0a-de30-11e4-8780-a120550bb3dd.png
+
+> plot(iris$Petal.Width, iris$Sepal.Width,pch=19,col=as.numeric(iris$Species))
+> partition.tree(tree1, label="Species", add=TRUE)
+https://cloud.githubusercontent.com/assets/10501253/7058481/7e65bbde-de30-11e4-8c28-15723f6edb91.png
+
+> legend(1.75,4.5,legend=unique(iris$Species), col=unique(as.numeric(iris$Species)),pch=19)
+> set.seed(32313)
+> newdata<-data.frame(Petal.Width = runif(20,0,2.5), Sepal.Width = runif(20,2,4.5))
+> pred1<-predict(tree1,newdata)
+> pred1
+   setosa versicolor virginica
+1       0 0.02173913 0.9782609
+2       0 0.02173913 0.9782609
+3       1 0.00000000 0.0000000
+4       0 1.00000000 0.0000000
+5       0 0.02173913 0.9782609
+6       0 0.02173913 0.9782609
+7       0 0.02173913 0.9782609
+8       0 0.90476190 0.0952381
+9       0 1.00000000 0.0000000
+10      0 0.02173913 0.9782609
+11      0 1.00000000 0.0000000
+12      1 0.00000000 0.0000000
+13      1 0.00000000 0.0000000
+14      1 0.00000000 0.0000000
+15      0 0.02173913 0.9782609
+16      0 0.02173913 0.9782609
+17      0 1.00000000 0.0000000
+18      1 0.00000000 0.0000000
+19      0 1.00000000 0.0000000
+20      0 1.00000000 0.0000000
+> pred1<-predict(tree1,newdata,type="class")
+> plot(newdata$Petal.Width,newdata$Sepal.Width,col=as.numeric(pred1),pch=19)
+> partition.tree(tree1, "Species", add=TRUE)
+https://cloud.githubusercontent.com/assets/10501253/7058480/7e5b192c-de30-11e4-9555-4bd076020b4b.png
+
